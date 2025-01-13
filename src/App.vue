@@ -1,16 +1,23 @@
 <script setup>
+import { reactive } from "vue";
 import { items } from "./movies.json";
+ let movies = reactive(items);
 /*
  This is an Icon that you can use to represent the stars if you like
  otherwise you could just use a simple ⭐️ emoji, or * character.
 */
 // import { StarIcon } from "@heroicons/vue/24/solid";
+
+function rateMovie(movieIndex, index)
+{
+  movies[movieIndex].rating = index;
+}
 </script>
 
 <template>
 
   <div>
-    <div class="film" v-for="item in items">
+    <div class="film" v-for="(item, movieIndex) in movies" :key="movieIndex">
       <div>
         <img :src="item.image" />
         <span style="margin: 5px;"> {{ item.name }}</span>
@@ -20,45 +27,12 @@ import { items } from "./movies.json";
         </div>
         <div style="word-wrap: break-word; width:350px; margin: 5px;">{{ item.description }}</div>
         <div class="rating">Rating ({{ item.rating }}/5)
-          <div class="stars" v-for="index in item.rating">
-            <span>★</span>
+          <div class="stars" v-for="index in 5">
+            <button :class="{'starColor': index <= item.rating}"  @click="rateMovie(movieIndex, index)">★</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-<style>
-.film {
-  display: inline-block;
-  vertical-align: bottom;
-  margin: 10px 10px 10px 10px;
-  background-color: white;
-  width: 350px;
-  height: 650px;
-}
 
-.genre {
-  display: inline-block;
-  margin: 5px 5px 5px 5px;
-  background-color: blueviolet;
-  color: white;
-  border-radius: 8px;
-}
-
-.rating {
-  position: absolute;
-  top: 620px;
-  margin: 10px;
-}
-
-.stars {
-  display: inline-block;
-  color: yellowgreen;
-}
-
-img {
-  width: 350px;
-  height: 400px !important;
-}
-</style>
